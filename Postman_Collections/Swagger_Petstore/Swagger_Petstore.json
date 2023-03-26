@@ -1,0 +1,687 @@
+{
+	"info": {
+		"_postman_id": "f7683d9e-4f09-41d4-ad1f-ada83ad81565",
+		"name": "Swagger_Petstore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22824649"
+	},
+	"item": [
+		{
+			"name": "Pet_&_Order",
+			"item": [
+				{
+					"name": "Add a new pet to the store",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"    pm.environment.set(\"pet_id\", jsonData.id);\r",
+									"    pm.environment.set(\"pet_name\", jsonData.name);\r",
+									"    //Set values to the environment\r",
+									"\r",
+									"pm.test(\"Active environment is Swagger Petstore\", () => {\r",
+									"    pm.expect(pm.environment.name).to.eql(\"Swagger Petstore\");\r",
+									"    //Active environment check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    //Status code check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Header has Content-Type\", () => {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    //Header present check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is application/json\", () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql(\"application/json\");\r",
+									"    //Header value check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is < 200 ms\", () => {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"    //Responce time check\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$randomInt}}\",\r\n  \"category\": {\r\n    \"id\": 0,\r\n    \"name\": \"string\"\r\n  },\r\n  \"name\": \"{{$randomFirstName}}\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/pet",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check a pet after add",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    //Status code check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body match to correct\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\", \"category\", \"name\", \"photoUrls\", \"tags\", \"status\");\r",
+									"    //Body match check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Value types are correct\", () => {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.be.a(\"number\")\r",
+									"    pm.expect(jsonData.category).to.be.an(\"object\")\r",
+									"        pm.expect(jsonData.category.id).to.be.a(\"number\")\r",
+									"        pm.expect(jsonData.category.name).to.be.a(\"string\")\r",
+									"    pm.expect(jsonData.name).to.be.a(\"string\")\r",
+									"    pm.expect(jsonData.photoUrls).to.be.an(\"array\")\r",
+									"        pm.expect(jsonData.photoUrls[0]).to.be.a(\"string\")\r",
+									"    pm.expect(jsonData.tags).to.be.an(\"array\")\r",
+									"        pm.expect(jsonData.tags[0].id).to.be.a(\"number\")\r",
+									"        pm.expect(jsonData.tags[0].name).to.be.a(\"string\")\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\")\r",
+									"    //Value type check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body values are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(environment.pet_id);\r",
+									"    pm.expect(jsonData.category.id).to.eql(0);\r",
+									"    pm.expect(jsonData.category.name).to.eql(\"string\");\r",
+									"    pm.expect(jsonData.name).to.eql(environment.pet_name);\r",
+									"    pm.expect(jsonData.photoUrls[0]).to.eql(\"string\");\r",
+									"    pm.expect(jsonData.tags[0].id).to.eql(0);\r",
+									"    pm.expect(jsonData.tags[0].name).to.eql(\"string\");\r",
+									"    pm.expect(jsonData.status).to.eql(\"available\");\r",
+									"    //Body value check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is < 200 ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"  //Responce time check\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pet/{{pet_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"{{pet_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update an existing pet",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"    pm.environment.set(\"pet_name\",jsonData.name);\r",
+									"    //Set values to environment\r",
+									"\r",
+									"pm.test(\"Active environment is Swagger Petstore\", () => {\r",
+									"    pm.expect(pm.environment.name).to.eql(\"Swagger Petstore\");\r",
+									"    //Active environment check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    //Status code check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Header has Content-Type\", () => {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    //Header present check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is application/json\", () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql(\"application/json\");\r",
+									"    //Header value check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is < 200 ms\", () => {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"    //Responce time check\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": {{pet_id}},\r\n    \"category\": {\r\n        \"id\": {{pet_id}},\r\n        \"name\": \"string\"\r\n    },\r\n    \"name\": \"Martin\",\r\n    \"photoUrls\": [\r\n        \"string\"\r\n    ],\r\n    \"tags\": [\r\n        {\r\n            \"id\": {{pet_id}},\r\n            \"name\": \"string\"\r\n        }\r\n    ],\r\n    \"status\": \"available\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/pet",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check a pet after update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    //Status code check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body match to correct\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\", \"category\", \"name\", \"photoUrls\", \"tags\", \"status\");\r",
+									"    //Body match check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Value types are correct\", () => {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.be.a(\"number\")\r",
+									"    pm.expect(jsonData.category).to.be.an(\"object\")\r",
+									"        pm.expect(jsonData.category.id).to.be.a(\"number\")\r",
+									"        pm.expect(jsonData.category.name).to.be.a(\"string\")\r",
+									"    pm.expect(jsonData.name).to.be.a(\"string\")\r",
+									"    pm.expect(jsonData.photoUrls).to.be.an(\"array\")\r",
+									"        pm.expect(jsonData.photoUrls[0]).to.be.a(\"string\")\r",
+									"    pm.expect(jsonData.tags).to.be.an(\"array\")\r",
+									"        pm.expect(jsonData.tags[0].id).to.be.a(\"number\")\r",
+									"        pm.expect(jsonData.tags[0].name).to.be.a(\"string\")\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\")\r",
+									"    //Value type check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body values are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(environment.pet_id);\r",
+									"    pm.expect(jsonData.category.id).to.eql(environment.pet_id);\r",
+									"    pm.expect(jsonData.category.name).to.eql(\"string\");\r",
+									"    pm.expect(jsonData.name).to.eql(environment.pet_name);\r",
+									"    pm.expect(jsonData.photoUrls[0]).to.eql(\"string\");\r",
+									"    pm.expect(jsonData.tags[0].id).to.eql(environment.pet_id);\r",
+									"    pm.expect(jsonData.tags[0].name).to.eql(\"string\");\r",
+									"    pm.expect(jsonData.status).to.eql(\"available\");\r",
+									"    //Body value check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is < 200 ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"  //Responce time check\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pet/{{pet_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"{{pet_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add a new order for a pet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"    pm.environment.set(\"order_id\",jsonData.id);\r",
+									"    pm.environment.set(\"pet_amount\",jsonData.quantity);\r",
+									"    pm.environment.set(\"ship_date\",jsonData.shipDate);\r",
+									"    //Set values to the environment\r",
+									"\r",
+									"pm.test(\"Active environment is Swagger Petstore\", () => {\r",
+									"    pm.expect(pm.environment.name).to.eql(\"Swagger Petstore\");\r",
+									"    //Active environment check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    //Status code check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Header has Content-Type\", () => {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    //Header present check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is application/json\", () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql(\"application/json\");\r",
+									"    //Header value check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is < 200 ms\", () => {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"    //Responce time check\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$randomInt}}\",\r\n  \"petId\": \"{{pet_id}}\",\r\n  \"quantity\": \"{{$randomInt}}\",\r\n  \"shipDate\": \"{{$isoTimestamp}}\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/store/order",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"store",
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check an order after add",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    //Status code check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body match to correct\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\", \"category\", \"name\", \"photoUrls\", \"tags\", \"status\");\r",
+									"    //Body match check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Value types are correct\", () => {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.be.a(\"number\")\r",
+									"    pm.expect(jsonData.petId).to.be.a(\"number\")\r",
+									"    pm.expect(jsonData.quantity).to.be.a(\"number\")  \r",
+									"    pm.expect(jsonData.shipDate).to.be.a(\"string\")\r",
+									"    pm.expect(jsonData.status).to.be.a(\"string\")\r",
+									"    pm.expect(jsonData.complete).to.be.a(\"boolean\")\r",
+									"    //Value type check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body values are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(environment.order_id);\r",
+									"    pm.expect(jsonData.petId).to.eql(environment.pet_id);\r",
+									"    pm.expect(jsonData.quantity).to.eql(environment.pet_amount);\r",
+									"    pm.expect(jsonData.shipDate).to.eql(environment.ship_date);\r",
+									"    pm.expect(jsonData.status).to.eql(\"placed\");\r",
+									"    pm.expect(jsonData.complete).to.eql(true);\r",
+									"    //Body value check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is < 200 ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"  //Responce time check\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/store/order/{{order_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"store",
+								"order",
+								"{{order_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete an order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Active environment is Swagger Petstore\", () => {\r",
+									"    pm.expect(pm.environment.name).to.eql(\"Swagger Petstore\");\r",
+									"    //Active environment check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    //Status code check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Header has Content-Type\", () => {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    //Header present check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is application/json\", () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql(\"application/json\");\r",
+									"    //Header value check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is < 200 ms\", () => {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"    //Responce time check\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/store/order/{{order_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"store",
+								"order",
+								"{{order_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check an order after delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"    //Status code check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body match to correct\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"code\", \"type\", \"message\");\r",
+									"    //Body match check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Value types are correct\", () => {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\")\r",
+									"    pm.expect(jsonData.type).to.be.a(\"string\")\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\")  \r",
+									"    //Value type check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body values are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.eql(1);\r",
+									"    pm.expect(jsonData.type).to.eql(\"error\");\r",
+									"    pm.expect(jsonData.message).to.eql(\"Order not found\");\r",
+									"    //Body value check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is < 200 ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"  //Responce time check\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/store/order/{{order_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"store",
+								"order",
+								"{{order_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a pet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Active environment is Swagger Petstore\", () => {\r",
+									"    pm.expect(pm.environment.name).to.eql(\"Swagger Petstore\");\r",
+									"    //Active environment check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    //Status code check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Header has Content-Type\", () => {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    //Header present check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is application/json\", () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql(\"application/json\");\r",
+									"    //Header value check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is < 200 ms\", () => {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"    //Responce time check\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pet/{{pet_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"{{pet_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check a pet after delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"    //Status code check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body match to correct\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"code\", \"type\", \"message\");\r",
+									"    //Body match check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Value types are correct\", () => {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.be.a(\"number\")\r",
+									"    pm.expect(jsonData.type).to.be.a(\"string\")\r",
+									"    pm.expect(jsonData.message).to.be.a(\"string\")  \r",
+									"    //Value type check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body values are correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.eql(1);\r",
+									"    pm.expect(jsonData.type).to.eql(\"error\");\r",
+									"    pm.expect(jsonData.message).to.eql(\"Pet not found\");\r",
+									"    //Body value check\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is < 200 ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"  //Responce time check\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pet/{{pet_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"{{pet_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
